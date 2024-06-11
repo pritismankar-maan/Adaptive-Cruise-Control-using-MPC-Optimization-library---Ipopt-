@@ -1,0 +1,7 @@
+[
+{
+  "directory": "/home/maan/Desktop/c++ code test/adaptive_cruise_control_sparse/build",
+  "command": "/usr/bin/g++    -g   -o CMakeFiles/acc.dir/main.cpp.o -c \"/home/maan/Desktop/c++ code test/adaptive_cruise_control_sparse/main.cpp\"",
+  "file": "/home/maan/Desktop/c++ code test/adaptive_cruise_control_sparse/main.cpp"
+}
+]

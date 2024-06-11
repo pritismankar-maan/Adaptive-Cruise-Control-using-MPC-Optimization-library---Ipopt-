@@ -1,0 +1,15 @@
+{
+    "files.associations": {
+        "ostream": "cpp",
+        "*.tcc": "cpp",
+        "istream": "cpp",
+        "limits": "cpp",
+        "*.txx": "cpp",
+        "array": "cpp",
+        "initializer_list": "cpp",
+        "memory_resource": "cpp",
+        "condition_variable": "cpp"
+    },
+    "C_Cpp.errorSquiggles": "disabled",
+    "ros.distro": "noetic"
+}
