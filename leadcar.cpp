@@ -8,17 +8,17 @@ acc::cl_leadCar::cl_leadCar()
     // std::fill(leadCar_speed_profile.begin(), leadCar_speed_profile.end(), 20.00);
     
     // Add user-selected points to the vector
-    acc::cl_leadCar::user_inputs.emplace_back(0, 10.0); // Using emplace_back
-    acc::cl_leadCar::user_inputs.emplace_back(600, 10.0);
-    acc::cl_leadCar::user_inputs.emplace_back(2000, 5.0);
-    acc::cl_leadCar::user_inputs.emplace_back(3000, 5.0);
-    acc::cl_leadCar::user_inputs.emplace_back(5000, 12.0);
-    acc::cl_leadCar::user_inputs.emplace_back(6000, 12.0);
-    acc::cl_leadCar::user_inputs.emplace_back(8000, 0.0);
-    acc::cl_leadCar::user_inputs.emplace_back(9000, 0.0);
-    acc::cl_leadCar::user_inputs.emplace_back(10000, 10.0);
-    acc::cl_leadCar::user_inputs.emplace_back(11000, 15.0);
-    acc::cl_leadCar::user_inputs.emplace_back(11999, 10.0);
+    acc::cl_leadCar::user_inputs.emplace_back(0, 29.0); // Using emplace_back
+    acc::cl_leadCar::user_inputs.emplace_back(600, 29.0);
+    acc::cl_leadCar::user_inputs.emplace_back(2000, 32.0);
+    acc::cl_leadCar::user_inputs.emplace_back(3000, 30.0);
+    acc::cl_leadCar::user_inputs.emplace_back(5000, 23.0);
+    acc::cl_leadCar::user_inputs.emplace_back(6000, 20.0);
+    acc::cl_leadCar::user_inputs.emplace_back(8000, 15.0);
+    acc::cl_leadCar::user_inputs.emplace_back(9000, 15.0);
+    acc::cl_leadCar::user_inputs.emplace_back(10000, 20.0);
+    acc::cl_leadCar::user_inputs.emplace_back(11000, 24.0);
+    acc::cl_leadCar::user_inputs.emplace_back(11999, 24.0);
 
     // Logic to create lenthy leadCar speed values for each timeStep and store it in Vector
     // The exact leadCar speed at any timeStep would be fetched in real-time from this vector

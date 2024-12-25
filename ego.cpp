@@ -13,8 +13,8 @@ double acc::cl_ego::ego_curr_velocity;
 acc::cl_ego::cl_ego(/* args */)
 {
     // Initial distance between cars and Ego's initial velocity
-    acc::cl_ego::dist_betw_cars = 500.00;
-    acc::cl_ego::ego_curr_velocity = 0.00;
+    acc::cl_ego::dist_betw_cars = 20.00;
+    acc::cl_ego::ego_curr_velocity = 25.00;
 }
 // function implementation
 // get the new velocity/speed after the first element of optimized force is applied on Ego/Plant
