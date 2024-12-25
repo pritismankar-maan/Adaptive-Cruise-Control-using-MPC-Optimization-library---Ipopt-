@@ -1,6 +1,7 @@
 #ifndef EGO_H
 #define EGO_H
 #include"leadcar.hpp"
+#include<random>
 
 namespace acc{
 // Class declaration
@@ -22,6 +23,12 @@ class cl_ego:public acc::cl_leadCar
         double dist_covered_ego {0.00};                                                                     // Distance covered by the Ego from zero-point
         const double lidar_stddev {0.1};                                                                    // lidar measurement noise - std dev value
 
+        // Define variabled needed to introduce random noise in LIDAR data
+        double min_noise {-0.1};    
+        double max_noise {0.1};
+        std::random_device rd;                                                                              // Random number generator
+        double noise; // Store random noise value in specific timeSteps
+        
         // constructor declaration+
         cl_ego();
 

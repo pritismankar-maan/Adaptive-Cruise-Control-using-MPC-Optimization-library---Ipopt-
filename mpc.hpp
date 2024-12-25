@@ -2,6 +2,7 @@
 #define MPC_H
 #include "/usr/local/include/nlopt.hpp"
 #include"ego.hpp"
+#include<chrono>
 
 namespace acc{
 
@@ -15,12 +16,16 @@ private:
     static size_t sim_step_forward_counter;                                                 // counter variable   
     
     std::vector<double> opt_A {std::vector<double>(control_horizon)};                       // vector that stores the optimized acceleration vector after finding min cost
-
+    
     // declare object
     nlopt::opt opt;
     // cl_ego cl_real_ego; - not needed, check
     
 public:
+    std::chrono::steady_clock::time_point begin_opt;
+    std::chrono::steady_clock::time_point end_opt;
+    int64_t task_time_ms;
+    
     // constructor
     cl_MPC();
     // member function

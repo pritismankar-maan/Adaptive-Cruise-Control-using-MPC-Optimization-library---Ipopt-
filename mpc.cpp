@@ -4,9 +4,6 @@
 #include"ego.cpp"
 #include"mpc.hpp"
 #include "MyNLP.hpp"
-
-#include<chrono>
-
 #include "/usr/local/include/coin-or/IpIpoptApplication.hpp"
 #include "/usr/local/include/coin-or/IpSolveStatistics.hpp"
 
@@ -44,10 +41,16 @@ void acc::cl_MPC::fn_evaluteMPC()
     Ipopt::SmartPtr<Ipopt::TNLP> mynlp = new MyNLP(70);
     
     Ipopt::SmartPtr<Ipopt::IpoptApplication> app = IpoptApplicationFactory();
-   
     //app->Options()->SetNumericValue("tol", 3.82e-4);
     app->Options()->SetStringValue("mu_strategy", "adaptive");
+    app->Options()->SetStringValue("check_derivatives_for_naninf","yes");
+    app->Options()->SetStringValue("check_bounds","yes");
     app->Options()->SetIntegerValue("print_level", 2);
+    app->Options()->SetStringValue("nlp_scaling_method","gradient-based");
+    app->Options()->SetNumericValue("nlp_scaling_max_gradient", 100);
+    app->Options()->SetNumericValue("obj_scaling_factor", 0.01);
+    app->Options()->SetNumericValue("bound_relax_factor", 1e-6);
+
     //app->Options()->SetStringValue("output_file", "results.out");
 
     // Initialize the IpoptApplication and process the options
@@ -59,19 +62,14 @@ void acc::cl_MPC::fn_evaluteMPC()
         //return (int) status;
     }
 
-    std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
-    std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
         
     // 'step_forward_counter' is wrt to real Ego/Plant, run the plant for 10mins
     for(size_t step_forward_counter = 0; step_forward_counter < 12000; step_forward_counter++)
     {
         // get feedback (kalman filters can be used in real measurement to get the pose = Distance between cars & speed)
         // For simplicity, we won't be implementing the kalman filter
-        if(step_forward_counter ==1351)
-        {
-            int a = 1;
-//            app->Options()->SetIntegerValue("print_level", 6);
-        }
+        
+
         status = app->OptimizeTNLP(mynlp);
 
         if( status == Ipopt::Solve_Succeeded )
@@ -83,12 +81,19 @@ void acc::cl_MPC::fn_evaluteMPC()
             Ipopt::Number final_obj = app->Statistics()->FinalObjective();
             std::cout << std::endl << std::endl << "*** The final value of the objective function is " << final_obj << '.'
                         << std::endl;
+        
+        }
+        else 
+        //if (status == Ipopt::)
+        
+        {
+            
+            //acc::cl_MPC::fn_sendControlOutputToPlant(int(MyNLP::A),-4.00);            
+            //std::cout<<"Timestep in the real world = "<<MyNLP::A<<std::endl;
+            //std::cout<<"Measure Speed = "<<acc::cl_ego::ego_curr_velocity<<std::endl;
+            //std::cout<< "Update lidar reading = "<<acc::cl_ego::dist_betw_cars<<std::endl;
+            //MyNLP::A++;
         }
 
-        /* else
-        {
-            app->Options()->SetIntegerValue("print_level", 6);
-            return;           
-        } */
     }
 }

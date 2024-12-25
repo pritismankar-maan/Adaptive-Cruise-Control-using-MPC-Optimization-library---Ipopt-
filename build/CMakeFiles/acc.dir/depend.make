@@ -12,9 +12,12 @@ CMakeFiles/acc.dir/main.cpp.o: ../mpc.cpp
 CMakeFiles/acc.dir/main.cpp.o: ../mpc.hpp
 CMakeFiles/acc.dir/main.cpp.o: /usr/local/include/coin-or/IpAlgTypes.hpp
 CMakeFiles/acc.dir/main.cpp.o: /usr/local/include/coin-or/IpCachedResults.hpp
+CMakeFiles/acc.dir/main.cpp.o: /usr/local/include/coin-or/IpCompoundVector.hpp
 CMakeFiles/acc.dir/main.cpp.o: /usr/local/include/coin-or/IpDebug.hpp
 CMakeFiles/acc.dir/main.cpp.o: /usr/local/include/coin-or/IpException.hpp
 CMakeFiles/acc.dir/main.cpp.o: /usr/local/include/coin-or/IpIpoptApplication.hpp
+CMakeFiles/acc.dir/main.cpp.o: /usr/local/include/coin-or/IpIpoptData.hpp
+CMakeFiles/acc.dir/main.cpp.o: /usr/local/include/coin-or/IpIteratesVector.hpp
 CMakeFiles/acc.dir/main.cpp.o: /usr/local/include/coin-or/IpJournalist.hpp
 CMakeFiles/acc.dir/main.cpp.o: /usr/local/include/coin-or/IpMatrix.hpp
 CMakeFiles/acc.dir/main.cpp.o: /usr/local/include/coin-or/IpNLP.hpp
@@ -29,6 +32,8 @@ CMakeFiles/acc.dir/main.cpp.o: /usr/local/include/coin-or/IpSolveStatistics.hpp
 CMakeFiles/acc.dir/main.cpp.o: /usr/local/include/coin-or/IpSymMatrix.hpp
 CMakeFiles/acc.dir/main.cpp.o: /usr/local/include/coin-or/IpTNLP.hpp
 CMakeFiles/acc.dir/main.cpp.o: /usr/local/include/coin-or/IpTaggedObject.hpp
+CMakeFiles/acc.dir/main.cpp.o: /usr/local/include/coin-or/IpTimedTask.hpp
+CMakeFiles/acc.dir/main.cpp.o: /usr/local/include/coin-or/IpTimingStatistics.hpp
 CMakeFiles/acc.dir/main.cpp.o: /usr/local/include/coin-or/IpTypes.h
 CMakeFiles/acc.dir/main.cpp.o: /usr/local/include/coin-or/IpTypes.hpp
 CMakeFiles/acc.dir/main.cpp.o: /usr/local/include/coin-or/IpUtils.hpp

@@ -13,9 +13,12 @@ CMakeFiles/acc.dir/main.cpp.o
  /home/maan/Desktop/c++ code test/adaptive_cruise_control_sparse/mpc.hpp
  /usr/local/include/coin-or/IpAlgTypes.hpp
  /usr/local/include/coin-or/IpCachedResults.hpp
+ /usr/local/include/coin-or/IpCompoundVector.hpp
  /usr/local/include/coin-or/IpDebug.hpp
  /usr/local/include/coin-or/IpException.hpp
  /usr/local/include/coin-or/IpIpoptApplication.hpp
+ /usr/local/include/coin-or/IpIpoptData.hpp
+ /usr/local/include/coin-or/IpIteratesVector.hpp
  /usr/local/include/coin-or/IpJournalist.hpp
  /usr/local/include/coin-or/IpMatrix.hpp
  /usr/local/include/coin-or/IpNLP.hpp
@@ -30,6 +33,8 @@ CMakeFiles/acc.dir/main.cpp.o
  /usr/local/include/coin-or/IpSymMatrix.hpp
  /usr/local/include/coin-or/IpTNLP.hpp
  /usr/local/include/coin-or/IpTaggedObject.hpp
+ /usr/local/include/coin-or/IpTimedTask.hpp
+ /usr/local/include/coin-or/IpTimingStatistics.hpp
  /usr/local/include/coin-or/IpTypes.h
  /usr/local/include/coin-or/IpTypes.hpp
  /usr/local/include/coin-or/IpUtils.hpp

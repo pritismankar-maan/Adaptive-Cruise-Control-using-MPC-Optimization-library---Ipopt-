@@ -1,25 +1,18 @@
-// Copyright (C) 2004, 2006 International Business Machines and others.
-// All Rights Reserved.
-// This code is published under the Eclipse Public License.
-//
-// Authors:  Carl Laird, Andreas Waechter     IBM    2004-11-05
-
 #include "MyNLP.hpp"
-//#include "mpc.cpp"
-
 #include <cassert>
 #include <iostream>
 #include <fstream>
+#include <iomanip>
 
 #ifdef __GNUC__
 #pragma GCC diagnostic ignored "-Wunused-parameter"
 #endif
 
-//using namespace Ipopt;
-
 /* Constructor. */
 MyNLP::MyNLP(const int &k):k_(k)
-{ }
+{ 
+   
+}
 
 MyNLP::~MyNLP()
 { }
@@ -32,27 +25,20 @@ bool MyNLP::get_nlp_info(
    Ipopt::TNLP::IndexStyleEnum& Index_style
 )
 {
-   // The problem described in MyNLP.hpp has 2 variables, x1, & x2,
+   // The problem described in MyNLP.hpp has 3k_ variables - v1,s1,a1,v2,s2,a2,...,
    n = 3*k_;
 
-   // one equality constraint,
+   // 2k_ equality constraint - Safe following dist & Speed inequality for each timeStep
    m = 2*k_;
 
-   // 2 nonzeros in the jacobian (one for x1, and one for x2),
+   //nonzeros in the jacobian -
    nnz_jac_g = 7*k_ - 3;
 
-   // and 2 nonzeros in the hessian of the lagrangian
-   // (one in the hessian of the objective for x2,
-   //  and one in the hessian of the constraints for x1)
+   // nonzeros in the hessian of the lagrangian
    nnz_h_lag = 3*k_;
 
    // We use the standard fortran Ipopt::Index style for row/col entries
    Index_style = C_STYLE; //FORTRAN_STYLE;
-
-   // declare few constants before starting optimization for the current timestep 
-   //B = 1/(pow(acc::controller_timestep,2));
-   //A = (B*(pow(acc::cl_ego::ego_curr_velocity,2)) + 5*(pow(acc::cl_ego::speed_limit,2)));
-
    return true;
 }
 
@@ -76,11 +62,11 @@ bool MyNLP::get_bounds_info(
    {
       if(i<m)
       {
-         // set lower and upper limit of constraints
+         // Inequalities: set lower and upper limit of constraints
          g_l[i] = 0;
          g_u[i] = 0;
 
-         // set lower and upper limit of parameters/ optimization variables
+         // State varibles(3k_): set lower and upper limit 
          if(i%3==0)
          {
             // speed limit
@@ -95,6 +81,11 @@ bool MyNLP::get_bounds_info(
             // distance upper limit = lidar reading + sim distance by lead car - 12 (distance limit)
             x_u[i] = acc::cl_ego::dist_betw_cars + (acc::cl_ego::leadCar_curr_velocity*acc::controller_timestep*(i+2)/3) - 12 - (acc::cl_ego::ego_curr_velocity*acc::controller_timestep*(i+2)/3);
             
+            // Ego can't travel backwards and hence the negative future distanceStep are over-written to zero 
+            if (x_u[i] < 0)
+            {
+               x_u[i] = 0;
+            }
          }
          else
          {
@@ -106,7 +97,7 @@ bool MyNLP::get_bounds_info(
       }
       else
       {
-         // set lower and upper limit of parameters/ optimization variables
+         // State varibles(3k_): set lower and upper limit
          if(i%3==0)
          {
             // speed limit
@@ -119,6 +110,12 @@ bool MyNLP::get_bounds_info(
             x_l[i] = 0;
             // distance upper limit = lidar reading + sim distance by lead car - 12 (distance limit)
             x_u[i] = acc::cl_ego::dist_betw_cars + (acc::cl_ego::leadCar_curr_velocity*acc::controller_timestep*(i+2)/3) - 12 - (acc::cl_ego::ego_curr_velocity*acc::controller_timestep*(i+2)/3);
+            
+            // Ego can't travel backwards and hence the negative future distanceStep are over-written to zero 
+            if (x_u[i] < 0)
+            {
+               x_u[i] = 0;
+            }               
          }
          else
          {
@@ -127,6 +124,20 @@ bool MyNLP::get_bounds_info(
             x_u[i] = 2;
          }
       }
+      
+      // For debugging
+      //if (acc::cl_ego::ego_curr_velocity < 0.7)
+      //{
+      //   std::cout<<"i th value for constraint display = "<<i<<std::endl;
+      //   std::cout<<"x_l[i] = "<<x_l[i]<<std::endl;
+      //   std::cout<<"x_u[i] = "<<x_u[i]<<std::endl;
+
+      //   if(x_u[i] < 0)
+      //   {
+      //      x_u[i] = 0.1;
+      //   }
+      //}
+   
    }
 
    return true;
@@ -151,14 +162,12 @@ bool MyNLP::get_starting_point(
    assert(init_z == false);
    assert(init_lambda == false);
 
-   // give the last 
-   //std::copy(opt_X, opt_X + n, x);
-
+   // Not modifying the values for now - Ideally, one 'x' should be right shifted !
    //intialize to zero
-   for (Ipopt::Index i = 0; i < n; i++)
-   {
-      x[i] = 0;
-   }
+   //for (Ipopt::Index i = 0; i < n; i++)
+   //{
+   //   x[i] = 0;
+   //}
    
    return true;
 }
@@ -191,8 +200,6 @@ bool MyNLP::eval_f(
       }
    }
    
-   //obj_value = obj_value + 10000000*pow((1/(acc::cl_ego::dist_betw_cars - x[298])),2);
-
    return true;
 }
 
@@ -461,69 +468,75 @@ void MyNLP::finalize_solution(
    Ipopt::IpoptCalculatedQuantities* ip_cq
 )
 {
-   
-   if(A==1)
+   // Open file to save data
+   if(MyNLP::A==1)
    {
-      out.open("results.txt");
-      out << "Simulate Step number " << "," << "Current lidar reading" << "," << "Estimated lead car speed from lidar reading" << "," << "Acceleration command from MPC" << "," <<  "Speed command from MPC" << "," << "Distance command from MPC" << "," << "Measure Speed" << "," << "Update lidar reading" << std::endl;
+      MyNLP::begin_time = std::chrono::steady_clock::now();
+      out.open("../output/results.txt");
+      out << "#Simulate Step number,Current lidar reading,Estimated lead car speed from lidar reading,Acceleration command from MPC,Speed command from MPC,Distance command from MPC,Measure Speed,Update lidar reading,Time taken by task" << std::endl;
    }else{
-      out.open("results.txt",std::ios_base::app);
+      out.open("../output/results.txt",std::ios_base::app);
    }
    
-
-   // here is where we would store the solution to variables, or write to a file, etc
-   // so we could use the solution. Since the solution is displayed to the console,
-   // we currently do nothing here.
-   std::cout << "*****************************************************" << std::endl;
-   std::cout << "Current lidar reading = "<<acc::cl_ego::dist_betw_cars<<std::endl;
-   std::cout << "Estimated lead car speed from lidar reading = "<<acc::cl_ego::leadCar_curr_velocity<<std::endl;
-
-    
-
-   if(A==1357)
+   // Display custom log on terminal in real-time
+   std::cout << std::endl;
+   std::cout << "**********************************************************************" << std::endl;
+   std::cout << "********** Custom Optimization Log after " << MyNLP::A << " th timeStep **********" << std::endl;
+   std::cout << "**********************************************************************" << std::endl;
+   std::cout << std::endl;
+   std::cout << "Estimated Sesnor Reading before Optimization" << std::endl;
+   std::cout <<"-----------------------------------------------" << std::endl;
+   std::cout << "Current Ego's Speed = " << acc::cl_ego::ego_curr_velocity << " m/s" << std::endl;
+   std::cout << "Front Lidar Reading (with noise) - Simulated = " << acc::cl_ego::dist_betw_cars << " meters" << std::endl;
+   std::cout << "Estimated LeadCar velocity from above Lidar reading = " << acc::cl_ego::leadCar_curr_velocity << " m/s" << std::endl;
+   
+   std::cout << std::endl;
+   std::cout << "1st timestep optimized State variable" << std::endl;
+   std::cout <<"----------------------------------------" << std::endl;
+   std::cout << "Next Acceleration command from IPOPT = " << x[2] << " m/ss" << std::endl;
+   std::cout << "Expected Speed value of Ego by next timeStep from IPOPT = " << x[0] << " m/s" << std::endl;
+   std::cout << "Expected Distance Ego will travel by next timeStep from IPOPT = " << x[1] << " meters " << std::endl;
+   
+   // trigger plantStep
+   if (x[0] < 0.1 && x[3] < x[0])
    {
-      double d = 1;
+      // Intentionally triggering brake command once following speed command is less than 0.1 m/s (0.3 kmph) and the Ego anticipate to slow down further
+      // based on current planned & optimized path (chain of v,s,a for each time timestep upto event horizon)
+      Ipopt::Number a = -4.00;
+      acc::cl_MPC::fn_sendControlOutputToPlant(int(MyNLP::A),a);
+
+      std::cout << "Acceleration command send to Plant/Ego = " << a << " m/ss" << std::endl;
+   }else
+   {
+      // TriggerPlantStep based on 1st Accel Command
+      acc::cl_MPC::fn_sendControlOutputToPlant(int(MyNLP::A),x[2]);
+
+      std::cout << "Acceleration command send to Plant/Ego = " << x[2] << " m/ss" << std::endl;
    }
 
-   std::cout << "Acceleration command from MPC = " << x[2] << std::endl;
-   std::cout << "Speed command from MPC  = " << x[0] << std::endl;
-   std::cout << "Distance command from MPC = " << x[1] << std::endl;
-   acc::cl_MPC::fn_sendControlOutputToPlant(int(A),x[2]);   
-   scnd_acc_from_prev_step = x[5];
+   // printing some values after Step Update   
+   std::cout << std::endl;
+   std::cout << "Latest Speed & Lidar Reading after applying gas/brake" << std::endl;
+   std::cout <<"-------------------------------------------------------" << std::endl;
+   std::cout<<"Latest Ego's Speed after PlantStep = "<< acc::cl_ego::ego_curr_velocity << " m/s" << std::endl;
+   std::cout<< "Latest Lidar Reading after PlantStep = "<< acc::cl_ego::dist_betw_cars << " meters" << std::endl;
 
+   // time taken between plantStep (currently using this as metric to find task time) 
+   MyNLP::end_time = std::chrono::steady_clock::now();
+   opt_time_ms = std::chrono::duration_cast<std::chrono::milliseconds>(MyNLP::end_time - MyNLP::begin_time).count();
+   // store next start time
+   MyNLP::begin_time = std::chrono::steady_clock::now();
 
-   out << A << "," << acc::cl_ego::dist_betw_cars << "," << acc::cl_ego::leadCar_curr_velocity << "," << x[2] << "," <<  x[0] << "," << x[1] << "," << acc::cl_ego::ego_curr_velocity << "," << acc::cl_ego::dist_betw_cars << std::endl;
-
-   /* if(status == Ipopt::SolverReturn::SUCCESS or status == Ipopt::SolverReturn::STOP_AT_ACCEPTABLE_POINT)
-   {
-      std::cout << "Acceleration command from MPC = " << x[2] << std::endl;
-      std::cout << "Speed command from MPC  = " << x[0] << std::endl;
-      std::cout << "Distance command from MPC = " << x[1] << std::endl;
-      acc::cl_MPC::fn_sendControlOutputToPlant(int(A),x[2]);   
-      scnd_acc_from_prev_step = x[5];
-
-
-      out << A << "," << acc::cl_ego::dist_betw_cars << "," << acc::cl_ego::leadCar_curr_velocity << "," << x[2] << "," <<  x[0] << "," << x[1] << "," << acc::cl_ego::ego_curr_velocity << "," << acc::cl_ego::dist_betw_cars << std::endl;
-   }
-   else
-   {
-      std::cout << "Acceleration command from MPC = " << scnd_acc_from_prev_step << std::endl;
-      std::cout << "Speed command from MPC  = " << x[0] << std::endl;
-      std::cout << "Distance command from MPC = " << x[1] << std::endl;
-      std::cout << "Error in MPC =============================================== " << status << std::endl;
-      acc::cl_MPC::fn_sendControlOutputToPlant(int(A),scnd_acc_from_prev_step);
-
-      out << A << "," << acc::cl_ego::dist_betw_cars << "," << acc::cl_ego::leadCar_curr_velocity << "," << scnd_acc_from_prev_step << "," <<  x[0] << "," << x[1] << "," << acc::cl_ego::ego_curr_velocity << "," << acc::cl_ego::dist_betw_cars << std::endl;
-   } */
-   
-   std::cout<<"Simulate Step number (Accl cmd send to car ...) = "<<A<<std::endl;
-   
-   std::cout<<"Measure Speed = "<<acc::cl_ego::ego_curr_velocity<<std::endl;
-   std::cout<< "Update lidar reading = "<<acc::cl_ego::dist_betw_cars<<std::endl;
-
+   // write actual statevariables in file in real-time 
+   out << std::fixed << std::setprecision(4) << MyNLP::A << "," << acc::cl_ego::dist_betw_cars << "," << acc::cl_ego::leadCar_curr_velocity << "," << x[2] << "," <<  x[0] << "," << x[1] << "," << acc::cl_ego::ego_curr_velocity << "," << acc::cl_ego::dist_betw_cars << "," << MyNLP::opt_time_ms << std::endl;
    out.close();
 
-   A++;
-   
-   //std::copy(x, x + n, opt_X);
+   // added for debugging
+   if (acc::cl_ego::ego_curr_velocity < 0)
+    {
+        exit(1);
+    }
+
+   // update stepCounter (for tracking step numbers)
+   MyNLP::A++;   
 }

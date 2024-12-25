@@ -6,28 +6,21 @@
 
 #ifndef __MYNLP_HPP__
 #define __MYNLP_HPP__
-
+#include "/usr/local/include/coin-or/IpIpoptData.hpp"
 #include "/usr/local/include/coin-or/IpTNLP.hpp"
+#include "/usr/local/include/coin-or/IpTimingStatistics.hpp"
 #include "mpc.hpp"
 #include <fstream>
 
-//using namespace Ipopt;
-
-/** C++ Example NLP for interfacing a problem with IPOPT.
- *  MyNLP implements a C++ example showing how to interface with IPOPT
- *  through the TNLP interface. This example is designed to go along with
- *  the tutorial document (see Examples/CppTutorial/).
- *  This class implements the following NLP.
- *
- * min_x f(x) = -(x2-2)^2
- *  s.t.
- *       0 = x1^2 + x2 - 1
- *       -1 <= x1 <= 1
- *
- */
 class MyNLP: public Ipopt::TNLP, acc::cl_MPC
 {
 public:
+   // custom variables 
+   std::chrono::steady_clock::time_point begin_time;
+   std::chrono::steady_clock::time_point end_time;
+   int64_t opt_time_ms;
+   static double A;
+   
    /** default constructor */
    MyNLP(const int &k);
 
@@ -144,13 +137,9 @@ public:
 
 private:
    int k_; // number of timesteps in control horizon
-   Ipopt::Number* opt_X;
-   Ipopt::Number scnd_acc_from_prev_step;
    double accl_weight {0.001}; //0.01
    double sped_weight {10};   //10
    double dist_weight {0.001};//0.001
-   double B;
-   double A;
    std::ofstream out;
    /**@name Methods to block default compiler methods.
     *
@@ -173,4 +162,6 @@ private:
    //@}
 };
 
+// custom - need to initialize static variable outside of class and not in any functions !! 
+double MyNLP::A = 0;
 #endif
