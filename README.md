@@ -22,5 +22,12 @@ TBA (Need another fresh linux to verify)
 - Introduce Jerk state variable in our model to make ride comfortable
 - Introduce slack variable to 'Distance Inequality' and convert it into a weak constraint. This will help in handling residual noise from 'simulated' LIDAR readings. 
 
+## Datasheet for changing Inputs & Controller parameters
+![Tweaks Datasheet](/output/ss_after_fix/tweaks.png)
+
 ## Glossary
+### Model & Controller Design
+![State Space model with constraint](/output/Model.jpeg)
+![Cost function](/output/cost.jpeg)
+
  
