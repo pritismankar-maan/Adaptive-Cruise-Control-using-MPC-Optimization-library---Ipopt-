@@ -111,7 +111,8 @@ bool MyNLP::get_bounds_info(
             // distance upper limit = lidar reading + sim distance by lead car - 12 (distance limit)
             x_u[i] = acc::cl_ego::dist_betw_cars + (acc::cl_ego::leadCar_curr_velocity*acc::controller_timestep*(i+2)/3) - 12 - (acc::cl_ego::ego_curr_velocity*acc::controller_timestep*(i+2)/3);
             
-            // Ego can't travel backwards and hence the negative future distanceStep are over-written to zero 
+            // Ego can't travel backwards and hence the negative future distanceStep are over-written to zero
+            // can happen due to noisy leadCar readings or due to previous Opt failure 
             if (x_u[i] < 0)
             {
                x_u[i] = 0;
