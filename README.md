@@ -3,8 +3,8 @@
 In this project used 'Newton's Eqn of Motion' as my State Space model and Model Predictive Controller (Optimization Technique - IPOPT) to solve the problem and log data in real-time. The whole controller logic has been coded in cpp. Objective is to contribute to open-source and help students.  
 
 ## Results
-![Test Case -1 - At low speed](/output/ss_after_fix/TC-5.png)
-![Test Case -2 - At high speed](/output/ss_after_fix/TC-8.png)  
+![Test Case -1 - At low speed](/output/ss_after_fix/TC5.png)
+![Test Case -2 - At high speed](/output/ss_after_fix/TC8.png)  
 
 ## Features  
 - Can handle dynamic change in leadCar velocity incuding the scenario when the leadCar comes to a stop.  
