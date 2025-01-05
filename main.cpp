@@ -2,11 +2,11 @@
 //******************** ADAPTIVE CRUISE CONTROL using MODEL PREDICTIVE CONTROL************************** 
 // ASSUMPTION / PROPERTIES
 // 1. Ego is a point mass
-// 2. Using NLOPT for MPC
+// 2. Using IPOPT for MPC's optimization
 // 3. Used 3 laws of motion assuming the vehicle acc. would remain constant in between timestep
 // 4. Most of the time 'controller_timestep' means the time gap in between 2 MPC step
 // 5. Algorithm = LD_MMA
-// 6. Control horizon = TBA (5 controller timesteps)
+// 6. Control horizon = 3.5 secs (70 controller timesteps)
 // 7. Random noise has been added to the LIDAR readings to test MPC
 //*****************************************************************************************************
 
