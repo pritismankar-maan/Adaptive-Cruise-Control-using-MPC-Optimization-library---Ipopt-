@@ -1,6 +1,8 @@
 # Adaptive Cruise Control - Simplified  
 
-In this project, used 'Newton's Eqn of Motion' as my State Space model/plant (check 'Glossary') and Model Predictive Controller (Optimization Technique - IPOPT) to control pose of my simulated car based or real-time/iteration-based leadCar speed changes. We have a logging feature for each 'test case' as well and a post-analysis python script to assess Controller's performance. The whole Controller logic has been coded in cpp to promote compatibility with Embedded systems. Objective here is to contribute to open-source and help students and educators.  
+In this project, used 'Newton's Eqn of Motion' as my State Space model/plant (check 'Glossary') and Model Predictive Controller (Optimization Technique - IPOPT) to control pose of my simulated car based or real-time/iteration-based leadCar speed changes. 
+We have a logging feature for each 'test case' as well and a post-analysis python script to assess Controller's performance. The whole Controller logic has been coded in cpp to promote compatibility with Embedded systems. 
+Objective here is to contribute to open-source and help students and educators.  
 
 ## Assumptions
 - Car & leadCar are point mass & move along an 1-D plane for simplicity.
