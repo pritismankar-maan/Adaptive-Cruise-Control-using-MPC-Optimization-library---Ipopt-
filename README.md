@@ -23,6 +23,19 @@ Objective here is to contribute to open-source and help students and educators.
 - Have 'qt' backed python-GUI to analyze Controller performance based on logged data after successful completion of test case.  
 
 ## Installation  
+1. Install Project
+       ```bash
+    pritismankar@ubuntu-ros:~$ git clone https://github.com/pritismankar-maan/Adaptive-Cruise-Control-using-MPC-Optimization-library---Ipopt-.git
+    Cloning into 'Adaptive-Cruise-Control-using-MPC-Optimization-library---Ipopt-'...
+    remote: Enumerating objects: 173, done.
+    remote: Counting objects: 100% (173/173), done.
+    remote: Compressing objects: 100% (116/116), done.
+    remote: Total 173 (delta 62), reused 154 (delta 43), pack-reused 0 (from 0)
+    Receiving objects: 100% (173/173), 4.19 MiB | 6.58 MiB/s, done.
+    Resolving deltas: 100% (62/62), done.
+    pritismankar@ubuntu-ros:~$
+3. a
+4. a
 TBA (Need another fresh linux to verify)
 - Need to install IPOPT (Refer their original website) for controller to work  and Qt for analysis.
 
