@@ -1,0 +1,6 @@
+[submodule "vendor/cpp/Ipopt"]
+	path = vendor/cpp/Ipopt
+	url = https://github.com/coin-or/Ipopt.git
+[submodule "vendor/cpp/nlopt"]
+	path = vendor/cpp/nlopt
+	url = https://github.com/stevengj/nlopt.git
