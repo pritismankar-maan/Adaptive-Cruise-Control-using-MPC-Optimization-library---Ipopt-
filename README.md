@@ -22,9 +22,16 @@ Objective here is to contribute to open-source and help students and educators.
 - Results are displayed and logged after each plantStep.
 - Have 'qt' backed python-GUI to analyze Controller performance based on logged data after successful completion of test case.  
 
-## Installation  
-TBA (Need another fresh linux to verify)
-- Need to install IPOPT (Refer their original website) for controller to work  and Qt for analysis.
+## ## Installation
+
+1. Install Project
+```bash
+git clone https://github.com/pritismankar-maan/Adaptive-Cruise-Control-using-MPC-Optimization-library---Ipopt-.git
+cd Adaptive-Cruise-Control-using-MPC-Optimization-library---Ipopt-
+git submodule update --init --recursive
+```
+2. Build and Install Dependencies (Python and cpp)
+3. Set up Python Environment
 
 ## Future Work
 - Introduce Jerk state variable in our model to make ride comfortable
